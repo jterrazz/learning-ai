@@ -1,5 +1,5 @@
 import { type ModelPort, OpenRouterAdapter } from '@jterrazz/intelligence';
-import { type LoggerPort, PinoLoggerAdapter } from '@jterrazz/logger';
+import { createLogger, type LoggerPort } from '@jterrazz/telemetry';
 import { Container, Injectable } from '@snap/ts-inject';
 import { default as nodeConfiguration } from 'config';
 
@@ -26,9 +26,9 @@ const loggerFactory = Injectable(
     'Logger',
     ['Configuration'] as const,
     (config: ConfigurationPort) =>
-        new PinoLoggerAdapter({
+        createLogger({
             level: config.getInboundConfiguration().logger.level,
-            prettyPrint: config.getInboundConfiguration().logger.prettyPrint,
+            pretty: config.getInboundConfiguration().logger.prettyPrint,
         }),
 );
 

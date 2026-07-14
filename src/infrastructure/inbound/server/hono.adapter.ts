@@ -1,5 +1,5 @@
 import { serve } from '@hono/node-server';
-import { type LoggerPort } from '@jterrazz/logger';
+import { type LoggerPort } from '@jterrazz/telemetry';
 import { Hono } from 'hono';
 
 import {

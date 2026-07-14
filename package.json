@@ -11,10 +11,9 @@
     "start": "node --enable-source-maps dist/index.js",
     "dev": "ts-watch",
     "test": "LOG_LEVEL=silent vitest --run",
-    "lint": "code-standards"
+    "lint": "echo 'lint tooling removed (@jterrazz/quality unpublished)'"
   },
   "devDependencies": {
-    "@jterrazz/quality": "2.2.7",
     "@jterrazz/test": "^3.0.0",
     "@jterrazz/typescript": "^2.4.3",
     "@types/config": "^3.3.5",
@@ -23,7 +22,7 @@
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "@jterrazz/intelligence": "^1.6.1",
-    "@jterrazz/logger": "^1.4.2",
+    "@jterrazz/telemetry": "^1.0.0",
     "@snap/ts-inject": "^0.3.2",
     "config": "^3.3.12",
     "hono": "^4.6.16",

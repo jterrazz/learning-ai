@@ -1,4 +1,4 @@
-import { type LoggerLevel } from '@jterrazz/logger';
+import { type LoggerLevel } from '@jterrazz/telemetry';
 
 /**
  * Configuration port providing access to application settings

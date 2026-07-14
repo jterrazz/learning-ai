@@ -5,7 +5,7 @@ import {
     SystemPromptAdapter,
     UserPromptAdapter,
 } from '@jterrazz/intelligence';
-import { type LoggerPort } from '@jterrazz/logger';
+import { type LoggerPort } from '@jterrazz/telemetry';
 import { z } from 'zod/v4';
 
 import { type TransactionCategorizerAgentPort } from '../../../application/ports/outbound/agents/transaction-categorizer.agent.js';

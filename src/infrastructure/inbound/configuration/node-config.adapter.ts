@@ -1,4 +1,4 @@
-import { LoggerLevelSchema } from '@jterrazz/logger';
+import { LoggerLevelSchema } from '@jterrazz/telemetry';
 import { z } from 'zod/v4';
 
 import {
