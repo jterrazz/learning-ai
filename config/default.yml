@@ -1,8 +1,8 @@
 inbound:
-  env: production
-  http:
-    host: localhost
-    port: 3000
-  logger:
-    level: info
-    prettyPrint: false
+    env: production
+    http:
+        host: localhost
+        port: 3000
+    logger:
+        level: info
+        prettyPrint: false

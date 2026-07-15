@@ -8,5 +8,5 @@ export interface TransactionRepositoryPort {
     /**
      * Find transactions matching the given criteria
      */
-    findMany(options: FindManyOptions): Promise<Transaction[]>;
+    findMany: (options: FindManyOptions) => Promise<Transaction[]>;
 }

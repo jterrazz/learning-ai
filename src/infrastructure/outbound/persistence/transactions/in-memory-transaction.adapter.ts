@@ -2,12 +2,11 @@ import {
     type FindManyOptions,
     type TransactionRepositoryPort,
 } from '../../../../application/ports/outbound/persistence/transaction-repository.port.js';
-
 import { type Transaction } from '../../../../domain/transaction.entity.js';
-
 import {
-    InMemoryTransactionMapper,
     type InMemoryTransactionRecord,
+    mapTransactionToDomain,
+    mapTransactionToPersistence,
 } from './in-memory-transaction.mapper.js';
 
 /**
@@ -53,10 +52,10 @@ export class InMemoryTransactionAdapter implements TransactionRepositoryPort {
             filtered = filtered.filter((record) => record.accountIban === accountIban);
         }
 
-        return filtered.map(InMemoryTransactionMapper.toDomain);
+        return filtered.map(mapTransactionToDomain);
     }
 
     insert(transaction: Transaction): void {
-        this.records.push(InMemoryTransactionMapper.toPersistence(transaction));
+        this.records.push(mapTransactionToPersistence(transaction));
     }
 }

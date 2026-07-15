@@ -20,18 +20,18 @@ export interface ServerPort {
     /**
      * Make a test request to the server
      */
-    request(
+    request: (
         path: string,
         options?: { body?: object | string; headers?: Record<string, string>; method?: string },
-    ): Promise<Response>;
+    ) => Promise<Response>;
 
     /**
      * Start the server with the given configuration
      */
-    start(config: ServerConfiguration): Promise<void>;
+    start: (config: ServerConfiguration) => Promise<void>;
 
     /**
      * Stop the server gracefully
      */
-    stop(): Promise<void>;
+    stop: () => Promise<void>;
 }

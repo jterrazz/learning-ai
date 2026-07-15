@@ -1,6 +1,5 @@
 import { type Account } from '../../../domain/account.entity.js';
 import { type Transaction } from '../../../domain/transaction.entity.js';
-
 import { type TransactionCategorizerAgentPort } from '../../ports/outbound/agents/transaction-categorizer.agent.js';
 import { type AccountRepositoryPort } from '../../ports/outbound/persistence/account-repository.port.js';
 import { type TransactionRepositoryPort } from '../../ports/outbound/persistence/transaction-repository.port.js';
@@ -9,7 +8,7 @@ import { type TransactionRepositoryPort } from '../../ports/outbound/persistence
  * Result returned by GetAccountsUseCase containing the raw domain accounts and
  * additional pagination metadata.
  */
-export interface AccountWithTransactions {
+interface AccountWithTransactions {
     account: Account;
     transactions: Transaction[];
 }

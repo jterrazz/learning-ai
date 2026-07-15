@@ -1,3 +1,4 @@
 {
-  "extends": "@jterrazz/typescript/tsconfig/node-esm"
+    "extends": "@jterrazz/typescript/tsconfig/node",
+    "include": ["src/"]
 }

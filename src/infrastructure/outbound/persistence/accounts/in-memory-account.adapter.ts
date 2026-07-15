@@ -2,10 +2,12 @@ import {
     type AccountRepositoryPort,
     type FindManyOptions,
 } from '../../../../application/ports/outbound/persistence/account-repository.port.js';
-
 import { type Account } from '../../../../domain/account.entity.js';
-
-import { InMemoryAccountMapper, type InMemoryAccountRecord } from './in-memory-account.mapper.js';
+import {
+    type InMemoryAccountRecord,
+    mapAccountToDomain,
+    mapAccountToPersistence,
+} from './in-memory-account.mapper.js';
 
 /**
  * Simple, thread-unsafe in-memory implementation of the {@link AccountRepositoryPort}.
@@ -21,7 +23,7 @@ export class InMemoryAccountAdapter implements AccountRepositoryPort {
     constructor() {
         this.records = [
             {
-                balance: 1_000,
+                balance: 1000,
                 bic: 'REVOGB21',
                 country: 'GB',
                 currency: 'GBP',
@@ -29,7 +31,7 @@ export class InMemoryAccountAdapter implements AccountRepositoryPort {
                 name: 'Personal',
             },
             {
-                balance: 2_000,
+                balance: 2000,
                 bic: 'DEUTDEFF',
                 country: 'DE',
                 currency: 'EUR',
@@ -54,13 +56,13 @@ export class InMemoryAccountAdapter implements AccountRepositoryPort {
             );
         }
 
-        return filteredRecords.map(InMemoryAccountMapper.toDomain);
+        return filteredRecords.map(mapAccountToDomain);
     }
 
     /**
      * Adds a new account to the in-memory store. Handy in tests.
      */
     public insert(account: Account): void {
-        this.records.push(InMemoryAccountMapper.toPersistence(account));
+        this.records.push(mapAccountToPersistence(account));
     }
 }

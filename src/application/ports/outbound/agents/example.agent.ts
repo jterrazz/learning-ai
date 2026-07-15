@@ -3,7 +3,7 @@
  * Port for the Example Agent that generates word definitions
  */
 export interface ExampleAgentPort {
-    run(input: ExampleInput): Promise<ExampleResult>;
+    run: (input: ExampleInput) => Promise<ExampleResult>;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-export const accountSchema = z.object({
+const accountSchema = z.object({
     balance: z.number(),
     bic: z.string(),
     country: z.string(),

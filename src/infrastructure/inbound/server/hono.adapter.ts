@@ -7,7 +7,6 @@ import {
     type ServerPort,
 } from '../../../application/ports/inbound/server.port.js';
 import { type AccountRepositoryPort } from '../../../application/ports/outbound/persistence/account-repository.port.js';
-
 import { createAccountsRouter } from './accounts/accounts.routes.js';
 import { type GetAccountsController } from './accounts/get-accounts.controller.js';
 import { createHealthCheckRouter } from './health/health.routes.js';
@@ -49,7 +48,9 @@ export class HonoServerAdapter implements ServerPort {
     }
 
     public async stop(): Promise<void> {
-        if (!this.server) return;
+        if (!this.server) {
+            return;
+        }
 
         this.logger.info('Stopping server');
         await this.server.close();

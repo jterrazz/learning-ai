@@ -10,20 +10,18 @@ export type InMemoryTransactionRecord = {
     id: string;
 };
 
-export class InMemoryTransactionMapper {
-    static toDomain(record: InMemoryTransactionRecord): Transaction {
-        return new Transaction(record);
-    }
+export function mapTransactionToDomain(record: InMemoryTransactionRecord): Transaction {
+    return new Transaction(record);
+}
 
-    static toPersistence(transaction: Transaction): InMemoryTransactionRecord {
-        return {
-            accountIban: transaction.accountIban,
-            amount: transaction.amount,
-            category: transaction.category,
-            currency: transaction.currency,
-            date: transaction.date,
-            description: transaction.description,
-            id: transaction.id,
-        };
-    }
+export function mapTransactionToPersistence(transaction: Transaction): InMemoryTransactionRecord {
+    return {
+        accountIban: transaction.accountIban,
+        amount: transaction.amount,
+        category: transaction.category,
+        currency: transaction.currency,
+        date: transaction.date,
+        description: transaction.description,
+        id: transaction.id,
+    };
 }

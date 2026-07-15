@@ -1,15 +1,17 @@
-import { beforeEach, describe, expect, it } from '@jterrazz/test';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { type DeepMockProxy, mock } from 'vitest-mock-extended';
 
 import { Account } from '../../../../domain/account.entity.js';
-import { Transaction } from '../../../../domain/transaction.entity.js';
-import { TransactionCategory } from '../../../../domain/transaction.entity.js';
-
+import { Transaction, TransactionCategory } from '../../../../domain/transaction.entity.js';
 import { type TransactionCategorizerAgentPort } from '../../../ports/outbound/agents/transaction-categorizer.agent.js';
 import { type AccountRepositoryPort } from '../../../ports/outbound/persistence/account-repository.port.js';
 import { type TransactionRepositoryPort } from '../../../ports/outbound/persistence/transaction-repository.port.js';
-
 import { type GetAccountsParams, GetAccountsUseCase } from '../get-accounts.use-case.js';
+
+const createParams = (overrides: Partial<GetAccountsParams> = {}): GetAccountsParams => ({
+    currency: undefined,
+    ...overrides,
+});
 
 describe('GetAccountsUseCase', () => {
     let repository: DeepMockProxy<AccountRepositoryPort>;
@@ -44,11 +46,6 @@ describe('GetAccountsUseCase', () => {
         repository.findMany.mockResolvedValue(sampleAccounts);
         transactionsRepository.findMany.mockResolvedValue([]);
         categorizerAgent.categorize.mockResolvedValue({});
-    });
-
-    const createParams = (overrides: Partial<GetAccountsParams> = {}): GetAccountsParams => ({
-        currency: undefined,
-        ...overrides,
     });
 
     it('should return accounts from repository', async () => {

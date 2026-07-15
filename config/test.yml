@@ -1,12 +1,12 @@
 inbound:
-  env: test
-  http:
-    host: localhost
-    port: 3000
-  logger:
-    level: debug
-    prettyPrint: true
+    env: test
+    http:
+        host: localhost
+        port: 3000
+    logger:
+        level: debug
+        prettyPrint: true
 
 outbound:
-  openRouter:
-    apiKey: test-openrouter-key
+    openRouter:
+        apiKey: test-openrouter-key

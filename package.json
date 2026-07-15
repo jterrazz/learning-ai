@@ -1,31 +1,35 @@
 {
-  "name": "learning-ai",
-  "version": "1.0.0",
-  "author": "Jean-Baptiste Terrazzoni <contact@jterrazz.com>",
-  "type": "module",
-  "engines": {
-    "node": "22.x.x"
-  },
-  "scripts": {
-    "build": "ts-compile",
-    "start": "node --enable-source-maps dist/index.js",
-    "dev": "ts-watch",
-    "test": "LOG_LEVEL=silent vitest --run",
-    "lint": "echo 'lint tooling removed (@jterrazz/quality unpublished)'"
-  },
-  "devDependencies": {
-    "@jterrazz/test": "^3.0.0",
-    "@jterrazz/typescript": "^2.4.3",
-    "@types/config": "^3.3.5",
-    "@types/node": "^22.13.4"
-  },
-  "dependencies": {
-    "@hono/node-server": "^1.13.7",
-    "@jterrazz/intelligence": "^1.6.1",
-    "@jterrazz/telemetry": "^1.0.0",
-    "@snap/ts-inject": "^0.3.2",
-    "config": "^3.3.12",
-    "hono": "^4.6.16",
-    "zod": "^3.25.28"
-  }
+    "name": "learning-ai",
+    "version": "1.0.0",
+    "author": "Jean-Baptiste Terrazzoni <contact@jterrazz.com>",
+    "type": "module",
+    "scripts": {
+        "build": "typescript build",
+        "start": "typescript start",
+        "dev": "typescript dev",
+        "test": "LOG_LEVEL=silent vitest --run",
+        "lint": "typescript check",
+        "lint:fix": "typescript fix"
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.13.7",
+        "@jterrazz/intelligence": "^1.6.1",
+        "@jterrazz/telemetry": "^1.0.0",
+        "@snap/ts-inject": "^0.3.2",
+        "config": "^3.3.12",
+        "hono": "^4.6.16",
+        "zod": "^3.25.28"
+    },
+    "devDependencies": {
+        "@jterrazz/typescript": "^6.0.3",
+        "@types/config": "^3.3.5",
+        "@types/node": "^22.13.4",
+        "oxfmt": "^0.59.0",
+        "oxlint": "^1.74.0",
+        "vitest": "^3.2.4",
+        "vitest-mock-extended": "^3.1.1"
+    },
+    "engines": {
+        "node": "22.x.x"
+    }
 }

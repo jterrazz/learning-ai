@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jterrazz/test';
+import { describe, expect, test } from 'vitest';
 import { ZodError } from 'zod/v4';
 
 import { NodeConfigAdapter } from '../node-config.adapter.js';
@@ -49,7 +49,7 @@ describe('Node Config Adapter', () => {
         const invalidConfig = {
             ...validConfig,
             outbound: {
-                openRouter: { apiKey: '' }, // empty api key should fail
+                openRouter: { apiKey: '' }, // Empty api key should fail
             },
         };
 
@@ -92,7 +92,7 @@ describe('Node Config Adapter', () => {
             inbound: {
                 ...validConfig.inbound,
                 http: {
-                    port: 3000, // host is missing
+                    port: 3000, // Host is missing
                 },
             },
         };

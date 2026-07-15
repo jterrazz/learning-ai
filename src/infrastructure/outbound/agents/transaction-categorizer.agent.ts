@@ -9,7 +9,6 @@ import { type LoggerPort } from '@jterrazz/telemetry';
 import { z } from 'zod/v4';
 
 import { type TransactionCategorizerAgentPort } from '../../../application/ports/outbound/agents/transaction-categorizer.agent.js';
-
 import { type Transaction, TransactionCategory } from '../../../domain/transaction.entity.js';
 
 export class TransactionCategorizerAgentAdapter implements TransactionCategorizerAgentPort {
@@ -56,7 +55,9 @@ export class TransactionCategorizerAgentAdapter implements TransactionCategorize
         );
 
     async categorize(transactions: Transaction[]): Promise<Record<string, TransactionCategory>> {
-        if (transactions.length === 0) return {};
+        if (transactions.length === 0) {
+            return {};
+        }
 
         this.logger.info(`Categorizing ${transactions.length} transactions`);
 

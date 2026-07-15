@@ -7,7 +7,7 @@ export enum TransactionCategory {
     SALARY = 'SALARY',
 }
 
-export const transactionSchema = z.object({
+const transactionSchema = z.object({
     accountIban: z.string(),
     amount: z.number(),
     category: z.nativeEnum(TransactionCategory).optional(),

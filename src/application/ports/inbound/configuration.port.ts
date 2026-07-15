@@ -7,12 +7,12 @@ export interface ConfigurationPort {
     /**
      * Get the inbound configuration
      */
-    getInboundConfiguration(): InboundConfigurationPort;
+    getInboundConfiguration: () => InboundConfigurationPort;
 
     /**
      * Get the outbound configuration
      */
-    getOutboundConfiguration(): OutboundConfigurationPort;
+    getOutboundConfiguration: () => OutboundConfigurationPort;
 }
 
 /**

@@ -4,13 +4,11 @@ import { Container, Injectable } from '@snap/ts-inject';
 import { default as nodeConfiguration } from 'config';
 
 import type { ConfigurationPort } from '../application/ports/inbound/configuration.port.js';
-
 import type { ServerPort } from '../application/ports/inbound/server.port.js';
 import { type TransactionCategorizerAgentPort } from '../application/ports/outbound/agents/transaction-categorizer.agent.js';
 import { type AccountRepositoryPort } from '../application/ports/outbound/persistence/account-repository.port.js';
 import { type TransactionRepositoryPort } from '../application/ports/outbound/persistence/transaction-repository.port.js';
 import { GetAccountsUseCase } from '../application/use-cases/accounts/get-accounts.use-case.js';
-
 import { NodeConfigAdapter } from '../infrastructure/inbound/configuration/node-config.adapter.js';
 import { GetAccountsController } from '../infrastructure/inbound/server/accounts/get-accounts.controller.js';
 import { HonoServerAdapter } from '../infrastructure/inbound/server/hono.adapter.js';

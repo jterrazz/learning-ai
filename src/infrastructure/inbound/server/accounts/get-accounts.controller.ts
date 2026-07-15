@@ -1,5 +1,4 @@
 import { type GetAccountsUseCase } from '../../../../application/use-cases/accounts/get-accounts.use-case.js';
-
 import { GetAccountsRequestHandler } from './get-accounts-request.handler.js';
 import { GetAccountsResponsePresenter } from './get-accounts-response.presenter.js';
 

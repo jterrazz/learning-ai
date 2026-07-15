@@ -1,5 +1,4 @@
 import { type GetAccountsResult } from '../../../../application/use-cases/accounts/get-accounts.use-case.js';
-
 import { type Account } from '../../../../domain/account.entity.js';
 import { type Transaction } from '../../../../domain/transaction.entity.js';
 

@@ -7,7 +7,7 @@ export interface AccountRepositoryPort {
     /**
      * Find accounts matching the given criteria
      */
-    findMany(options: FindManyOptions): Promise<Account[]>;
+    findMany: (options: FindManyOptions) => Promise<Account[]>;
 }
 
 export interface FindManyOptions {
