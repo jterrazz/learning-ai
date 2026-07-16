@@ -1,5 +1,5 @@
 import { HTTPException } from 'hono/http-exception';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 const currencyParamSchema = z
     .string()

@@ -1,4 +1,5 @@
-import { type ModelPort, OpenRouterAdapter } from '@jterrazz/intelligence';
+import type { LanguageModelV4 } from '@ai-sdk/provider';
+import { createOpenRouterProvider } from '@jterrazz/intelligence';
 import { createLogger, type LoggerPort } from '@jterrazz/telemetry';
 import { Container, Injectable } from '@snap/ts-inject';
 import { default as nodeConfiguration } from 'config';
@@ -33,14 +34,13 @@ const loggerFactory = Injectable(
 const modelFactory = Injectable(
     'Model',
     ['Configuration'] as const,
-    (config: ConfigurationPort): ModelPort =>
-        new OpenRouterAdapter({
+    (config: ConfigurationPort): LanguageModelV4 =>
+        createOpenRouterProvider({
             apiKey: config.getOutboundConfiguration().openRouter.apiKey,
             metadata: {
                 application: 'learning-ai',
             },
-            modelName: 'google/gemini-2.5-flash-lite-preview-06-17',
-        }),
+        }).model('google/gemini-2.5-flash-lite') as LanguageModelV4,
 );
 
 const accountRepositoryFactory = Injectable(
@@ -56,13 +56,13 @@ const transactionRepositoryFactory = Injectable(
 const exampleAgentFactory = Injectable(
     'ExampleAgent',
     ['Model', 'Logger'] as const,
-    (model: ModelPort, logger: LoggerPort) => new ExampleAgentAdapter(model, logger),
+    (model: LanguageModelV4, logger: LoggerPort) => new ExampleAgentAdapter(model, logger),
 );
 
 const transactionCategorizerAgentFactory = Injectable(
     'TransactionCategorizerAgent',
     ['Model', 'Logger'] as const,
-    (model: ModelPort, logger: LoggerPort): TransactionCategorizerAgentPort =>
+    (model: LanguageModelV4, logger: LoggerPort): TransactionCategorizerAgentPort =>
         new TransactionCategorizerAgentAdapter(model, logger),
 );
 

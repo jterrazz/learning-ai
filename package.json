@@ -12,13 +12,15 @@
         "lint:fix": "typescript fix"
     },
     "dependencies": {
+        "@ai-sdk/provider": "^4.0.3",
         "@hono/node-server": "^1.13.7",
-        "@jterrazz/intelligence": "^1.6.1",
-        "@jterrazz/telemetry": "^1.0.0",
+        "@jterrazz/intelligence": "^5.0.0",
+        "@jterrazz/telemetry": "^1.1.0",
         "@snap/ts-inject": "^0.3.2",
+        "ai": "^7.0.29",
         "config": "^3.3.12",
         "hono": "^4.6.16",
-        "zod": "^3.25.28"
+        "zod": "^4.4.3"
     },
     "devDependencies": {
         "@jterrazz/typescript": "^6.0.4",

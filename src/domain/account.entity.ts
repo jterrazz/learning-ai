@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 const accountSchema = z.object({
     balance: z.number(),

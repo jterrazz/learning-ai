@@ -1,47 +1,31 @@
-import {
-    BasicAgentAdapter,
-    type ModelPort,
-    PROMPT_LIBRARY,
-    SystemPromptAdapter,
-    UserPromptAdapter,
-} from '@jterrazz/intelligence';
+import type { LanguageModelV4 } from '@ai-sdk/provider';
+import { createSchemaPrompt, generateStructured } from '@jterrazz/intelligence';
 import { type LoggerPort } from '@jterrazz/telemetry';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 import { type TransactionCategorizerAgentPort } from '../../../application/ports/outbound/agents/transaction-categorizer.agent.js';
 import { type Transaction, TransactionCategory } from '../../../domain/transaction.entity.js';
 
 export class TransactionCategorizerAgentAdapter implements TransactionCategorizerAgentPort {
     static readonly SCHEMA = z.object({
-        categories: z.record(z.string(), z.nativeEnum(TransactionCategory)),
+        categories: z.record(z.string(), z.enum(TransactionCategory)),
     });
 
-    static readonly SYSTEM_PROMPT = new SystemPromptAdapter(
+    static readonly SYSTEM_PROMPT = [
         'You are an expert financial categorization engine.',
         'You receive an array of transactions and must return a JSON mapping of transaction IDs to a suitable category enum value: GROCERIES, SALARY, COFFEE, OTHER. Only output valid JSON conforming to the schema.',
-        PROMPT_LIBRARY.FOUNDATIONS.CONTEXTUAL_ONLY,
-    );
+        createSchemaPrompt(TransactionCategorizerAgentAdapter.SCHEMA),
+    ].join('\n\n');
 
     public readonly name = 'TransactionCategorizerAgent';
 
-    private readonly agent: BasicAgentAdapter<
-        z.infer<typeof TransactionCategorizerAgentAdapter.SCHEMA>
-    >;
-
     constructor(
-        private readonly model: ModelPort,
+        private readonly model: LanguageModelV4,
         private readonly logger: LoggerPort,
-    ) {
-        this.agent = new BasicAgentAdapter(this.name, {
-            logger: this.logger,
-            model: this.model,
-            schema: TransactionCategorizerAgentAdapter.SCHEMA,
-            systemPrompt: TransactionCategorizerAgentAdapter.SYSTEM_PROMPT,
-        });
-    }
+    ) {}
 
     static readonly USER_PROMPT = (transactions: Transaction[]) =>
-        new UserPromptAdapter(
+        [
             'Transactions',
             JSON.stringify(
                 transactions.map((t) => ({
@@ -52,7 +36,7 @@ export class TransactionCategorizerAgentAdapter implements TransactionCategorize
                 })),
             ),
             'TASK: Categorize each transaction and return a JSON object mapping transaction IDs to category values.',
-        );
+        ].join('\n\n');
 
     async categorize(transactions: Transaction[]): Promise<Record<string, TransactionCategory>> {
         if (transactions.length === 0) {
@@ -61,16 +45,19 @@ export class TransactionCategorizerAgentAdapter implements TransactionCategorize
 
         this.logger.info(`Categorizing ${transactions.length} transactions`);
 
-        const result = await this.agent.run(
-            TransactionCategorizerAgentAdapter.USER_PROMPT(transactions),
-        );
+        const result = await generateStructured({
+            model: this.model,
+            prompt: TransactionCategorizerAgentAdapter.USER_PROMPT(transactions),
+            schema: TransactionCategorizerAgentAdapter.SCHEMA,
+            system: TransactionCategorizerAgentAdapter.SYSTEM_PROMPT,
+        });
 
-        console.log(result);
-
-        if (!result) {
-            throw new Error('Agent returned no result');
+        if (!result.success) {
+            throw new Error(
+                `Categorizer agent failed (${result.error.code}): ${result.error.message}`,
+            );
         }
 
-        return result.categories;
+        return result.data.categories;
     }
 }

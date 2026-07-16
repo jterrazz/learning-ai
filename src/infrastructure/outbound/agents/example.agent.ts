@@ -1,12 +1,7 @@
-import {
-    BasicAgentAdapter,
-    type ModelPort,
-    PROMPT_LIBRARY,
-    SystemPromptAdapter,
-    UserPromptAdapter,
-} from '@jterrazz/intelligence';
+import type { LanguageModelV4 } from '@ai-sdk/provider';
+import { createSchemaPrompt, generateStructured } from '@jterrazz/intelligence';
 import { type LoggerPort } from '@jterrazz/telemetry';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 import {
     type ExampleAgentPort,
@@ -20,49 +15,44 @@ export class ExampleAgentAdapter implements ExampleAgentPort {
     });
 
     // System prompt tailored for a dictionary-style word-definition generator
-    static readonly SYSTEM_PROMPT = new SystemPromptAdapter(
+    static readonly SYSTEM_PROMPT = [
         'You are an experienced lexicographer for an English dictionary.',
         'Provide concise, clearly-written definitions suitable for a general audience (CEFR B2). Use no more than 30 words, start with an uppercase letter and avoid repeating the headword.',
-        PROMPT_LIBRARY.FOUNDATIONS.CONTEXTUAL_ONLY,
-    );
+        createSchemaPrompt(ExampleAgentAdapter.SCHEMA),
+    ].join('\n\n');
 
     public readonly name = 'ExampleAgent';
 
-    private readonly agent: BasicAgentAdapter<z.infer<typeof ExampleAgentAdapter.SCHEMA>>;
-
     constructor(
-        private readonly model: ModelPort,
+        private readonly model: LanguageModelV4,
         private readonly logger: LoggerPort,
-    ) {
-        this.agent = new BasicAgentAdapter(this.name, {
-            logger: this.logger,
-            model: this.model,
-            schema: ExampleAgentAdapter.SCHEMA,
-            systemPrompt: ExampleAgentAdapter.SYSTEM_PROMPT,
-        });
-    }
+    ) {}
 
     static readonly USER_PROMPT = (input: ExampleInput) =>
-        new UserPromptAdapter(
+        [
             `Headword: ${input.word}`,
-            '',
             'TASK: Write a single, concise English definition for the headword.',
-        );
+        ].join('\n\n');
 
     async run(input: ExampleInput): Promise<ExampleResult> {
         this.logger.info(`Generating definition for word "${input.word}"`);
 
-        const result = await this.agent.run(ExampleAgentAdapter.USER_PROMPT(input));
+        const result = await generateStructured({
+            model: this.model,
+            prompt: ExampleAgentAdapter.USER_PROMPT(input),
+            schema: ExampleAgentAdapter.SCHEMA,
+            system: ExampleAgentAdapter.SYSTEM_PROMPT,
+        });
 
-        if (!result) {
-            throw new Error('Example agent returned no result');
+        if (!result.success) {
+            throw new Error(`Example agent failed (${result.error.code}): ${result.error.message}`);
         }
 
         // Log successful composition for debugging
         this.logger.info('Successfully generated definition', {
-            definitionLength: result.definition.length,
+            definitionLength: result.data.definition.length,
         });
 
-        return result;
+        return result.data;
     }
 }

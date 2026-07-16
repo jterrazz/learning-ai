@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 export enum TransactionCategory {
     COFFEE = 'COFFEE',
@@ -10,13 +10,13 @@ export enum TransactionCategory {
 const transactionSchema = z.object({
     accountIban: z.string(),
     amount: z.number(),
-    category: z.nativeEnum(TransactionCategory).optional(),
+    category: z.enum(TransactionCategory).optional(),
     currency: z.string(),
     date: z.string().refine((val) => !Number.isNaN(Date.parse(val)), {
         message: 'Invalid date',
     }),
     description: z.string(),
-    id: z.string().uuid(),
+    id: z.uuid(),
 });
 
 export type TransactionProps = z.input<typeof transactionSchema>;
