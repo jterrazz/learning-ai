@@ -1,5 +1,4 @@
-import type { LanguageModelV4 } from '@ai-sdk/provider';
-import { createOpenRouterProvider } from '@jterrazz/intelligence';
+import { createIntelligence, type Intelligence } from '@jterrazz/intelligence';
 import { createLogger, type LoggerPort } from '@jterrazz/telemetry';
 import { Container, Injectable } from '@snap/ts-inject';
 import { default as nodeConfiguration } from 'config';
@@ -13,8 +12,8 @@ import { GetAccountsUseCase } from '../application/use-cases/accounts/get-accoun
 import { NodeConfigAdapter } from '../infrastructure/inbound/configuration/node-config.adapter.js';
 import { GetAccountsController } from '../infrastructure/inbound/server/accounts/get-accounts.controller.js';
 import { HonoServerAdapter } from '../infrastructure/inbound/server/hono.adapter.js';
-import { ExampleAgentAdapter } from '../infrastructure/outbound/agents/example.agent.js';
-import { TransactionCategorizerAgentAdapter } from '../infrastructure/outbound/agents/transaction-categorizer.agent.js';
+import { ExampleAgentAdapter } from '../infrastructure/outbound/agents/example/example.js';
+import { TransactionCategorizerAgentAdapter } from '../infrastructure/outbound/agents/transaction-categorizer/transaction-categorizer.js';
 import { InMemoryAccountAdapter } from '../infrastructure/outbound/persistence/accounts/in-memory-account.adapter.js';
 import { InMemoryTransactionAdapter } from '../infrastructure/outbound/persistence/transactions/in-memory-transaction.adapter.js';
 
@@ -31,16 +30,25 @@ const loggerFactory = Injectable(
         }),
 );
 
-const modelFactory = Injectable(
-    'Model',
-    ['Configuration'] as const,
-    (config: ConfigurationPort): LanguageModelV4 =>
-        createOpenRouterProvider({
-            apiKey: config.getOutboundConfiguration().openRouter.apiKey,
-            metadata: {
-                application: 'learning-ai',
+const intelligenceFactory = Injectable(
+    'Intelligence',
+    ['Configuration', 'Logger'] as const,
+    (config: ConfigurationPort, logger: LoggerPort): Intelligence => {
+        const { agents, providers } = config.getOutboundConfiguration().intelligence;
+
+        return createIntelligence({
+            agents,
+            logger,
+            providers: {
+                openrouter: {
+                    ...providers.openrouter,
+                    metadata: {
+                        application: 'learning-ai',
+                    },
+                },
             },
-        }).model('google/gemini-2.5-flash-lite') as LanguageModelV4,
+        });
+    },
 );
 
 const accountRepositoryFactory = Injectable(
@@ -55,15 +63,19 @@ const transactionRepositoryFactory = Injectable(
 
 const exampleAgentFactory = Injectable(
     'ExampleAgent',
-    ['Model', 'Logger'] as const,
-    (model: LanguageModelV4, logger: LoggerPort) => new ExampleAgentAdapter(model, logger),
+    ['Intelligence', 'Logger'] as const,
+    (intelligence: Intelligence, logger: LoggerPort) =>
+        new ExampleAgentAdapter(intelligence.model('example'), logger),
 );
 
 const transactionCategorizerAgentFactory = Injectable(
     'TransactionCategorizerAgent',
-    ['Model', 'Logger'] as const,
-    (model: LanguageModelV4, logger: LoggerPort): TransactionCategorizerAgentPort =>
-        new TransactionCategorizerAgentAdapter(model, logger),
+    ['Intelligence', 'Logger'] as const,
+    (intelligence: Intelligence, logger: LoggerPort): TransactionCategorizerAgentPort =>
+        new TransactionCategorizerAgentAdapter(
+            intelligence.model('transaction-categorizer'),
+            logger,
+        ),
 );
 
 /**
@@ -120,7 +132,7 @@ export const createContainer = () =>
         // Outbound adapters
         .provides(configurationFactory)
         .provides(loggerFactory)
-        .provides(modelFactory)
+        .provides(intelligenceFactory)
         .provides(accountRepositoryFactory)
         .provides(transactionRepositoryFactory)
         .provides(exampleAgentFactory)

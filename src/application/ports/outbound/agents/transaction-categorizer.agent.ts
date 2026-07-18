@@ -7,5 +7,5 @@ export interface TransactionCategorizerAgentPort {
     /**
      * Analyze a list of transactions and returns a mapping from transaction id to detected category.
      */
-    categorize: (transactions: Transaction[]) => Promise<Record<string, TransactionCategory>>;
+    run: (transactions: Transaction[]) => Promise<Record<string, TransactionCategory>>;
 }

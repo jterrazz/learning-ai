@@ -12,9 +12,8 @@
         "lint:fix": "typescript fix"
     },
     "dependencies": {
-        "@ai-sdk/provider": "^4.0.3",
         "@hono/node-server": "^1.13.7",
-        "@jterrazz/intelligence": "^5.0.0",
+        "@jterrazz/intelligence": "^6.0.0",
         "@jterrazz/telemetry": "^1.1.0",
         "@snap/ts-inject": "^0.3.2",
         "ai": "^7.0.29",

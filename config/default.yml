@@ -6,3 +6,16 @@ inbound:
     logger:
         level: info
         prettyPrint: false
+
+outbound:
+    intelligence:
+        providers:
+            openrouter:
+                type: openrouter
+        agents:
+            example:
+                provider: openrouter
+                model: google/gemini-2.5-flash-lite
+            transaction-categorizer:
+                provider: openrouter
+                model: google/gemini-2.5-flash-lite

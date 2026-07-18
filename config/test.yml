@@ -8,5 +8,7 @@ inbound:
         prettyPrint: true
 
 outbound:
-    openRouter:
-        apiKey: test-openrouter-key
+    intelligence:
+        providers:
+            openrouter:
+                apiKey: test-openrouter-key

@@ -17,8 +17,23 @@ describe('Node Config Adapter', () => {
             },
         },
         outbound: {
-            openRouter: {
-                apiKey: 'test-openrouter-key',
+            intelligence: {
+                agents: {
+                    example: {
+                        provider: 'openrouter',
+                        model: 'google/gemini-2.5-flash-lite',
+                    },
+                    'transaction-categorizer': {
+                        provider: 'openrouter',
+                        model: 'google/gemini-2.5-flash-lite',
+                    },
+                },
+                providers: {
+                    openrouter: {
+                        apiKey: 'test-openrouter-key',
+                        type: 'openrouter',
+                    },
+                },
             },
         },
     } as const;
@@ -49,7 +64,12 @@ describe('Node Config Adapter', () => {
         const invalidConfig = {
             ...validConfig,
             outbound: {
-                openRouter: { apiKey: '' }, // Empty api key should fail
+                intelligence: {
+                    ...validConfig.outbound.intelligence,
+                    providers: {
+                        openrouter: { apiKey: '', type: 'openrouter' }, // Empty api key should fail
+                    },
+                },
             },
         };
 

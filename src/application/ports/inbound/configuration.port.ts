@@ -34,7 +34,28 @@ export interface InboundConfigurationPort {
  * Outbound configuration (defined by external services)
  */
 export interface OutboundConfigurationPort {
-    openRouter: {
-        apiKey: string;
+    intelligence: {
+        agents: {
+            example: IntelligenceAgentConfig;
+            'transaction-categorizer': IntelligenceAgentConfig;
+        };
+        providers: {
+            openrouter: {
+                apiKey: string;
+                type: 'openrouter';
+            };
+        };
+    };
+}
+
+/**
+ * Reference to a resolved LLM model for a given agent task
+ */
+interface IntelligenceAgentConfig {
+    provider: string;
+    model: string;
+    fallback?: {
+        provider: string;
+        model: string;
     };
 }

@@ -50,7 +50,7 @@ export class GetAccountsUseCase {
         // Flatten transactions for categorization
         const allTransactions = accountsWithTransactions.flatMap((item) => item.transactions);
 
-        const categorizationMap = await this.transactionCategorizer.categorize(allTransactions);
+        const categorizationMap = await this.transactionCategorizer.run(allTransactions);
 
         // Assign category back to transactions
         accountsWithTransactions.forEach((item) => {

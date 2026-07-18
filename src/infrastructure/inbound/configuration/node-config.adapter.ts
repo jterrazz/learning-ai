@@ -23,10 +23,36 @@ const inboundSchema = z.object({
     logger: loggerSchema,
 });
 
+const modelRefSchema = z.object({
+    provider: z.string().min(1),
+    model: z.string().min(1),
+});
+
+const agentSchema = modelRefSchema.extend({
+    fallback: modelRefSchema.optional(),
+});
+
+const intelligenceAgentsSchema = z.object({
+    example: agentSchema,
+    'transaction-categorizer': agentSchema,
+});
+
+const openRouterProviderSchema = z.object({
+    apiKey: z.string().min(1),
+    type: z.literal('openrouter'),
+});
+
+const intelligenceProvidersSchema = z.object({
+    openrouter: openRouterProviderSchema,
+});
+
+const intelligenceSchema = z.object({
+    agents: intelligenceAgentsSchema,
+    providers: intelligenceProvidersSchema,
+});
+
 const outboundSchema = z.object({
-    openRouter: z.object({
-        apiKey: z.string().min(1),
-    }),
+    intelligence: intelligenceSchema,
 });
 
 const configurationSchema = z.object({

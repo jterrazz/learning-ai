@@ -45,7 +45,7 @@ describe('GetAccountsUseCase', () => {
         useCase = new GetAccountsUseCase(repository, transactionsRepository, categorizerAgent);
         repository.findMany.mockResolvedValue(sampleAccounts);
         transactionsRepository.findMany.mockResolvedValue([]);
-        categorizerAgent.categorize.mockResolvedValue({});
+        categorizerAgent.run.mockResolvedValue({});
     });
 
     it('should return accounts from repository', async () => {
@@ -94,11 +94,11 @@ describe('GetAccountsUseCase', () => {
             id: '1cf1e470-1862-4eaf-9f75-c94d4a085abc',
         });
         transactionsRepository.findMany.mockResolvedValue([tx1]);
-        categorizerAgent.categorize.mockResolvedValue({ [tx1.id]: TransactionCategory.GROCERIES });
+        categorizerAgent.run.mockResolvedValue({ [tx1.id]: TransactionCategory.GROCERIES });
 
         const result = await useCase.execute(createParams());
 
-        expect(categorizerAgent.categorize).toHaveBeenCalledTimes(1);
+        expect(categorizerAgent.run).toHaveBeenCalledTimes(1);
         expect(result.accounts[0].transactions[0].category).toEqual(TransactionCategory.GROCERIES);
     });
 });

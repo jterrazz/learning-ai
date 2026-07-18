@@ -3,5 +3,7 @@ inbound:
         level: LOG_LEVEL
 
 outbound:
-    openRouter:
-        apiKey: OPENROUTER_API_KEY
+    intelligence:
+        providers:
+            openrouter:
+                apiKey: OPENROUTER_API_KEY
